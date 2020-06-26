@@ -44,16 +44,12 @@ public:
 class MainMenuState : public State
 {
 private:
-	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnMods, *_btnQuit, *_btnUpdate;
+	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnMods;
 	Window *_window;
 	Text *_txtTitle, *_txtUpdateInfo;
-#ifdef _WIN32
-	bool _debugInVisualStudio;
-	std::string _newVersion;
-#endif
 public:
 	/// Creates the Main Menu state.
-	MainMenuState(bool updateCheck = false);
+	MainMenuState();
 	/// Cleans up the Main Menu state.
 	~MainMenuState();
 	/// Handler for clicking the New Game button.
@@ -66,10 +62,6 @@ public:
 	void btnOptionsClick(Action *action);
 	/// Handler for clicking the Mods button.
 	void btnModsClick(Action *action);
-	/// Handler for clicking the Quit button.
-	void btnQuitClick(Action *action);
-	/// Handler for clicking the Update button.
-	void btnUpdateClick(Action* action);
 	/// Update the resolution settings, we just resized the window.
 	void resize(int &dX, int &dY) override;
 	void init() override;
