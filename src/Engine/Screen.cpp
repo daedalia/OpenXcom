@@ -44,14 +44,13 @@ namespace OpenXcom
 const int Screen::ORIGINAL_WIDTH = 320;
 const int Screen::ORIGINAL_HEIGHT = 200;
 
-
 Renderer *Screen::createRenderer()
 {
 	if (Options::renderer == "SDL")
 	{
 		return new SDLRenderer(*this, _window);
 	}
-    Log(LOG_WARNING) << "No renderer specified, creating SDL renderer";
+	Log(LOG_WARNING) << "No renderer specified, creating SDL renderer";
 	return new SDLRenderer(*this, _window);
 }
 
@@ -61,7 +60,8 @@ Renderer *Screen::createRenderer()
  */
 void Screen::makeVideoFlags()
 {
-	_flags = SDL_WINDOW_OPENGL;
+	_flags = SDL_WINDOW_ALLOW_HIGHDPI;
+		
 	if (Options::allowResize)
 	{
 		_flags |= SDL_WINDOW_RESIZABLE;
@@ -72,15 +72,7 @@ void Screen::makeVideoFlags()
 	{
 		_flags |= SDL_ASYNCBLIT;
 	}
-	if (useOpenGL())
-	{
-		_flags = SDL_OPENGL;
-		SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
-		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-	}
+
 #endif
 
 	// Handle display mode
@@ -93,20 +85,6 @@ void Screen::makeVideoFlags()
 		_flags |= SDL_WINDOW_BORDERLESS;
 	}
 
-	// Try fixing the Samsung devices - see https://bugzilla.libsdl.org/show_bug.cgi?id=2291
-#ifdef __ANDROID__
-	if (Options::forceGLMode)
-	{
-		Log(LOG_INFO) << "Setting GL format to RGB565";
-		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
-		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-		//SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	}
-	CrossPlatform::setSystemUI();
-#endif
-
-	//_bpp = (use32bitScaler() || useOpenGL()) ? 32 : 8;
 	_bpp = 32;
 	_baseWidth = Options::baseXResolution;
 	_baseHeight = Options::baseYResolution;
@@ -123,14 +101,14 @@ Screen::Screen() : _window(NULL), _renderer(NULL),
 	_prevWidth(0), _prevHeight(0)
 {
 
-    _renderer = new SDLRenderer(*this);
+	_renderer = new SDLRenderer(*this);
 	auto upscalers = _renderer->getUpscalers();
-    for(const auto& scaler : upscalers)
-    {
-        registerUpscaler(_renderer->getRendererName(), scaler);
-    }
-    delete _renderer;
-    _renderer = nullptr;
+	for(const auto& scaler : upscalers)
+	{
+		registerUpscaler(_renderer->getRendererName(), scaler);
+	}
+	delete _renderer;
+	_renderer = nullptr;
 
 	resetDisplay();
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
@@ -254,23 +232,6 @@ void Screen::setPalette(const SDL_Color* colors, int firstcolor, int ncolors, bo
 		Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
 	}
 #endif
-
-	// Sanity check
-	/*
-	SDL_Color *newcolors = _screen->format->palette->colors;
-	for (int i = firstcolor, j = 0; i < firstcolor + ncolors; i++, j++)
-	{
-		Log(LOG_DEBUG) << (int)newcolors[i].r << " - " << (int)newcolors[i].g << " - " << (int)newcolors[i].b;
-		Log(LOG_DEBUG) << (int)colors[j].r << " + " << (int)colors[j].g << " + " << (int)colors[j].b;
-		if (newcolors[i].r != colors[j].r ||
-			newcolors[i].g != colors[j].g ||
-			newcolors[i].b != colors[j].b)
-		{
-			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
-			break;
-		}
-	}
-	*/
 }
 
 /**
@@ -289,10 +250,9 @@ const SDL_Color *Screen::getPalette() const
 int Screen::getWidth() const
 {
 	int w, h;
-	SDL_GetWindowSize(_window, &w, &h);
+	SDL_GetRendererOutputSize(SDL_GetRenderer(_window), &w, &h);
 	return w;
 }
-
 /**
  * Returns the height of the screen.
  * @return Height in pixels
@@ -300,7 +260,7 @@ int Screen::getWidth() const
 int Screen::getHeight() const
 {
 	int w, h;
-	SDL_GetWindowSize(_window, &w, &h);
+	SDL_GetRendererOutputSize(SDL_GetRenderer(_window), &w, &h);
 	return h;
 }
 
@@ -386,7 +346,7 @@ void Screen::resetDisplay(bool resetVideo, bool noShaders)
 		else
 		{
 #ifndef __ANDROID__
-            if (width != getWidth() || height != getHeight())
+			if (width != getWidth() || height != getHeight())
 			{
 				SDL_SetWindowSize(_window, width, height);
 			}
@@ -575,22 +535,8 @@ void Screen::screenshot(const std::string &filename) const
 	SDL_Surface *screenshot = SDL_CreateRGBSurface(0, getWidth(), getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
 	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth() - getWidth()%4, getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
 
-	if (useOpenGL())
-	{
-#ifndef __NO_OPENGL
-		GLenum format = GL_RGB;
+	SDL_BlitSurface(_screen, 0, screenshot, 0);
 
-		for (int y = 0; y < getHeight(); ++y)
-		{
-			glReadPixels(0, getHeight()-(y+1), getWidth() - getWidth()%4, 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
-		}
-		glErrorCheck();
-#endif
-	}
-	else
-	{
-		SDL_BlitSurface(_screen, 0, screenshot, 0);
-	}
 	std::vector<unsigned char> out;
 	if (_screen->format->BitsPerPixel == 8 && Options::rawScreenShots)
 	{
