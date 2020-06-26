@@ -627,7 +627,7 @@
 		5BD535AD2461B54C0041673F /* DogfightExperienceState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DogfightExperienceState.h; sourceTree = "<group>"; };
 		5BD535AF2461B5590041673F /* RuleBaseFacilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuleBaseFacilityFunctions.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B235EF5E201C4DF200FF7AC3 /* Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B235EF5E201C4DF200FF7AC3 /* OpenXcom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenXcom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B235EF5F201C4DF200FF7AC3 /* OpenXcom-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OpenXcom-Info.plist"; sourceTree = SOURCE_ROOT; };
 		B235EF60201C4F2A00FF7AC3 /* xcom-main-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xcom-main-image.png"; sourceTree = SOURCE_ROOT; };
 		B235EF62201C5F1A00FF7AC3 /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../SDL_image/Xcode-iOS/SDL_image.xcodeproj"; sourceTree = "<group>"; };
@@ -1321,7 +1321,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B235EF5E201C4DF200FF7AC3 /* Game.app */,
+				B235EF5E201C4DF200FF7AC3 /* OpenXcom.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2280,9 +2280,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B235EF48201C4DF200FF7AC3 /* Game */ = {
+		B235EF48201C4DF200FF7AC3 /* OpenXcom */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B235EF5B201C4DF200FF7AC3 /* Build configuration list for PBXNativeTarget "Game" */;
+			buildConfigurationList = B235EF5B201C4DF200FF7AC3 /* Build configuration list for PBXNativeTarget "OpenXcom" */;
 			buildPhases = (
 				B235EF49201C4DF200FF7AC3 /* Resources */,
 				B235EF4D201C4DF200FF7AC3 /* Sources */,
@@ -2297,9 +2297,9 @@
 				B2954F02202248FD00F5E3DF /* PBXTargetDependency */,
 				B2424205201C915000EB6722 /* PBXTargetDependency */,
 			);
-			name = Game;
+			name = OpenXcom;
 			productName = SDLiPodTest;
-			productReference = B235EF5E201C4DF200FF7AC3 /* Game.app */;
+			productReference = B235EF5E201C4DF200FF7AC3 /* OpenXcom.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2352,7 +2352,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				B235EF48201C4DF200FF7AC3 /* Game */,
+				B235EF48201C4DF200FF7AC3 /* OpenXcom */,
 			);
 		};
 /* End PBXProject section */
@@ -2864,7 +2864,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = me.meridian.OpenXcom;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OpenXcom;
 			};
 			name = Debug;
 		};
@@ -2890,7 +2890,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = me.meridian.OpenXcom;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OpenXcom;
 			};
 			name = Release;
 		};
@@ -2921,7 +2921,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B235EF5B201C4DF200FF7AC3 /* Build configuration list for PBXNativeTarget "Game" */ = {
+		B235EF5B201C4DF200FF7AC3 /* Build configuration list for PBXNativeTarget "OpenXcom" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B235EF5C201C4DF200FF7AC3 /* Debug */,
