@@ -35,11 +35,6 @@
 
 namespace OpenXcom
 {
-
-const std::string OptionsVideoState::GL_EXT = "OpenGL.shader";
-const std::string OptionsVideoState::GL_FOLDER = "Shaders/";
-const std::string OptionsVideoState::GL_STRING = "*";
-
 /**
  * Initializes all the elements in the Video Options screen.
  * @param game Pointer to the core game.
@@ -52,20 +47,15 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	// Create objects
 	_displaySurface = new InteractiveSurface(110, 32, 94, 18);
 	_txtDisplayResolution = new Text(114, 9, 94, 8);
-	_txtDisplayWidth = new TextEdit(this, 40, 17, 94, 26);
+	_txtDisplayWidth = new Text(40, 17, 94, 26);
 	_txtDisplayX = new Text(16, 17, 132, 26);
-	_txtDisplayHeight = new TextEdit(this, 40, 17, 144, 26);
-	_btnDisplayResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 186, 18);
-	_btnDisplayResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
+	_txtDisplayHeight = new Text(40, 17, 144, 26);
 
 	_txtLanguage = new Text(114, 9, 94, 52);
 	_cbxLanguage = new ComboBox(this, 104, 16, 94, 62);
 
 	_txtFilter = new Text(114, 9, 206, 52);
 	_cbxFilter = new ComboBox(this, 104, 16, 206, 62);
-
-	_txtMode = new Text(114, 9, 206, 22);
-	_cbxDisplayMode = new ComboBox(this, 104, 16, 206, 32);
 
 	_txtGeoScale = new Text(114, 9, 94, 82);
 	_cbxGeoScale = new ComboBox(this, 104, 16, 94, 92);
@@ -75,58 +65,21 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	_txtOptions = new Text(114, 9, 206, 82);
 	_btnLetterbox = new ToggleTextButton(104, 16, 206, 92);
-	_btnLockMouse = new ToggleTextButton(104, 16, 206, 110);
-	_btnRootWindowedMode = new ToggleTextButton(104, 16, 206, 128);
 
-	/* TODO: add current mode */
-	/* Get available fullscreen modes */
-	_res.resize(SDL_GetNumDisplayModes(0));
-	for (size_t i = 0; i < _res.size(); ++i)
-		SDL_GetDisplayMode(0, i, &_res[i]);
-	_resCurrent = -1;
-	if (_res.size() != 0)
-	{
-#if 0
-		int i;
-		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
-		{
-			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::displayWidth && _res[i]->h <= Options::displayHeight) || _res[i]->w < Options::displayWidth))
-			{
-				_resCurrent = i;
-			}
-		}
-		_res.size() = i;
-#endif
-	}
-	else
-	{
-		_btnDisplayResolutionDown->setVisible(false);
-		_btnDisplayResolutionUp->setVisible(false);
-		Log(LOG_WARNING) << "Couldn't get display resolutions";
-	}
 
 	add(_displaySurface);
 	add(_txtDisplayResolution, "text", "videoMenu");
 	add(_txtDisplayWidth, "resolution", "videoMenu");
 	add(_txtDisplayX, "resolution", "videoMenu");
 	add(_txtDisplayHeight, "resolution", "videoMenu");
-	add(_btnDisplayResolutionUp, "button", "videoMenu");
-	add(_btnDisplayResolutionDown, "button", "videoMenu");
 
 	add(_txtLanguage, "text", "videoMenu");
 	add(_txtFilter, "text", "videoMenu");
 
-	add(_txtMode, "text", "videoMenu");
-
 	add(_txtOptions, "text", "videoMenu");
 	add(_btnLetterbox, "button", "videoMenu");
-	add(_btnLockMouse, "button", "videoMenu");
-	add(_btnRootWindowedMode, "button", "videoMenu");
 
 	add(_cbxFilter, "button", "videoMenu");
-	add(_cbxDisplayMode, "button", "videoMenu");
 
 	add(_txtBattleScale, "text", "videoMenu");
 	add(_cbxBattleScale, "button", "videoMenu");
@@ -140,14 +93,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	// Set up objects
 	_txtDisplayResolution->setText(tr("STR_DISPLAY_RESOLUTION"));
 
-	_displaySurface->setTooltip("STR_DISPLAY_RESOLUTION_DESC");
-	_displaySurface->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_displaySurface->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
 	_txtDisplayWidth->setBig();
-	_txtDisplayWidth->setConstraint(TEC_NUMERIC_POSITIVE);
-	_txtDisplayWidth->onChange((ActionHandler)&OptionsVideoState::txtDisplayWidthChange);
 
 	_txtDisplayX->setAlign(ALIGN_CENTER);
 	_txtDisplayX->setBig();
@@ -155,19 +102,12 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 	_txtDisplayHeight->setAlign(ALIGN_CENTER);
 	_txtDisplayHeight->setBig();
-	_txtDisplayHeight->setConstraint(TEC_NUMERIC_POSITIVE);
-	_txtDisplayHeight->onChange((ActionHandler)&OptionsVideoState::txtDisplayHeightChange);
 
 	std::ostringstream ssW, ssH;
 	ssW << Options::displayWidth;
 	ssH << Options::displayHeight;
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
-
-	_btnDisplayResolutionUp->onMouseClick((ActionHandler)&OptionsVideoState::btnDisplayResolutionUpClick);
-	_btnDisplayResolutionDown->onMouseClick((ActionHandler)&OptionsVideoState::btnDisplayResolutionDownClick);
-
-	_txtMode->setText(tr("STR_DISPLAY_MODE"));
 
 	_txtOptions->setText(tr("STR_DISPLAY_OPTIONS"));
 
@@ -177,21 +117,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
 	_btnLetterbox->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
-	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
-	_btnLockMouse->setPressed(Options::captureMouse);
-	_btnLockMouse->onMouseClick((ActionHandler)&OptionsVideoState::btnLockMouseClick);
-	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
-	_btnLockMouse->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnLockMouse->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
-	_btnRootWindowedMode->setText(tr("STR_FIXED_WINDOW_POSITION"));
-	_btnRootWindowedMode->setPressed(Options::rootWindowedMode);
-	_btnRootWindowedMode->onMouseClick((ActionHandler)&OptionsVideoState::btnRootWindowedModeClick);
-	_btnRootWindowedMode->setTooltip("STR_FIXED_WINDOW_POSITION_DESC");
-	_btnRootWindowedMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnRootWindowedMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
+    
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
 
 	std::vector<std::string> names;
@@ -226,20 +152,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 		}
 	}
 
-#ifndef __NO_OPENGL
-	std::vector<std::string> filters;
-	for (auto f: FileMap::filterFiles(FileMap::getVFolderContents(GL_FOLDER), GL_EXT)) { filters.push_back(f); }
-	std::sort(filters.begin(), filters.end(), Unicode::naturalCompare);
-	for (auto i = filters.begin(); i != filters.end(); ++i)
-	{
-		std::string file = (*i);
-		std::string path = GL_FOLDER + file;
-		std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
-		filterNames.push_back(ucWords(name));
-		_filters.push_back(path);
-	}
-#endif
-
 	_txtFilter->setText(tr("STR_DISPLAY_FILTER"));
 
 	_cbxFilter->setOptions(filterNames);
@@ -248,34 +160,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_cbxFilter->setTooltip("STR_DISPLAY_FILTER_DESC");
 	_cbxFilter->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_cbxFilter->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-
-
-	std::vector<std::string> displayModes;
-	displayModes.push_back(tr("STR_WINDOWED"));
-	displayModes.push_back(tr("STR_FULLSCREEN"));
-	displayModes.push_back(tr("STR_BORDERLESS"));
-	displayModes.push_back(tr("STR_RESIZABLE"));
-
-	int displayMode = 0;
-	if (Options::fullscreen)
-	{
-		displayMode = 1;
-	}
-	else if (Options::borderless)
-	{
-		displayMode = 2;
-	}
-	else if (Options::allowResize)
-	{
-		displayMode = 3;
-	}
-
-	_cbxDisplayMode->setOptions(displayModes);
-	_cbxDisplayMode->setSelected(displayMode);
-	_cbxDisplayMode->onChange((ActionHandler)&OptionsVideoState::updateDisplayMode);
-	_cbxDisplayMode->setTooltip("STR_DISPLAY_MODE_DESC");
-	_cbxDisplayMode->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_cbxDisplayMode->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
 
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
 
@@ -308,9 +192,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 
 }
 
-/**
- *
- */
 OptionsVideoState::~OptionsVideoState()
 {
 
@@ -338,102 +219,6 @@ std::string OptionsVideoState::ucWords(std::string str)
 }
 
 /**
- * Selects a bigger display resolution.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
-{
-	if (_res.size() == 0)
-		return;
-	if (_resCurrent <= 0)
-	{
-		_resCurrent = _res.size()-1;
-	}
-	else
-	{
-		_resCurrent--;
-	}
-	updateDisplayResolution();
-}
-
-/**
- * Selects a smaller display resolution.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
-{
-	if (_res.size() == 0)
-		return;
-	if ( (size_t)(_resCurrent + 1) >= _res.size())
-	{
-		_resCurrent = 0;
-	}
-	else
-	{
-		_resCurrent++;
-	}
-	updateDisplayResolution();
-}
-
-/**
- * Updates the display resolution based on the selection.
- */
-void OptionsVideoState::updateDisplayResolution()
-{
-	std::ostringstream ssW, ssH;
-	ssW << _res[_resCurrent].w;
-	ssH << _res[_resCurrent].h;
-	_txtDisplayWidth->setText(ssW.str());
-	_txtDisplayHeight->setText(ssH.str());
-
-	Options::newDisplayWidth = _res[_resCurrent].w;
-	Options::newDisplayHeight = _res[_resCurrent].h;
-}
-
-/**
- * Changes the Display Width option.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::txtDisplayWidthChange(Action *)
-{
-	std::stringstream ss;
-	int width = 0;
-	ss << std::dec << _txtDisplayWidth->getText();
-	ss >> std::dec >> width;
-	Options::newDisplayWidth = width;
-}
-
-/**
- * Changes the Display Height option.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::txtDisplayHeightChange(Action *)
-{
-	std::stringstream ss;
-	int height = 0;
-	ss << std::dec << _txtDisplayHeight->getText();
-	ss >> std::dec >> height;
-	Options::newDisplayHeight = height;
-	// Update resolution mode
-	// TODO: Rewrite this part so that it would use std::vector
-#if 0
-	if (_res.size() > 0)
-	{
-		int i;
-		_resCurrent = -1;
-		for (std::vector<SDL_DisplayMode>::iterator i = _res.begin(); i != res.end(); ++i)
-		{
-			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::newDisplayWidth && _res[i]->h <= Options::newDisplayHeight) || _res[i]->w < Options::newDisplayWidth))
-			{
-				_resCurrent = i;
-			}
-		}
-	}
-#endif
-}
-
-/**
  * Changes the Language option.
  * @param action Pointer to an action.
  */
@@ -455,72 +240,12 @@ void OptionsVideoState::cbxFilterChange(Action *)
 }
 
 /**
- * Changes the Display Mode options.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::updateDisplayMode(Action *)
-{
-	switch(_cbxDisplayMode->getSelected())
-	{
-	case 0:
-		Options::newFullscreen = false;
-		Options::newBorderless = false;
-		Options::newAllowResize = false;
-		break;
-	case 1:
-		Options::newFullscreen = true;
-		Options::newBorderless = false;
-		Options::newAllowResize = false;
-		break;
-	case 2:
-		Options::newFullscreen = false;
-		Options::newBorderless = true;
-		Options::newAllowResize = false;
-		break;
-	case 3:
-		Options::newFullscreen = false;
-		Options::newBorderless = false;
-		Options::newAllowResize = true;
-		break;
-	default:
-		break;
-	}
-}
-
-/**
  * Changes the Letterboxing option.
  * @param action Pointer to an action.
  */
 void OptionsVideoState::btnLetterboxClick(Action *)
 {
 	Options::keepAspectRatio = _btnLetterbox->getPressed();
-}
-
-/**
- * Changes the Lock Mouse option.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::btnLockMouseClick(Action *)
-{
-	// Don't do that! Breaks stuff hard.
-	Options::captureMouse = _btnLockMouse->getPressed();
-	//SDL_SetRelativeMouseMode((Options::captureMouse)?SDL_TRUE:SDL_FALSE); //because a typecast is not enough
-}
-
-/**
- * Ask user where he wants to root screen.
- * @param action Pointer to an action.
- */
-void OptionsVideoState::btnRootWindowedModeClick(Action *)
-{
-	if (_btnRootWindowedMode->getPressed())
-	{
-		_game->pushState(new SetWindowedRootState(_origin, this));
-	}
-	else
-	{
-		Options::newRootWindowedMode = false;
-	}
 }
 
 /**
@@ -570,13 +295,4 @@ void OptionsVideoState::handle(Action *action)
 	}
 
 }
-
-/**
- * Unpresses Fixed Borderless Pos button
- */
-void OptionsVideoState::unpressRootWindowedMode()
-{
-	_btnRootWindowedMode->setPressed(false);
-}
-
 }
