@@ -104,7 +104,7 @@ MainMenuState::MainMenuState()
 
 	_btnMods->setText(tr("STR_MODS"));
 	_btnMods->onMouseClick((ActionHandler)&MainMenuState::btnModsClick);
-    
+
 	_txtUpdateInfo->setAlign(ALIGN_CENTER);
 	_txtUpdateInfo->setWordWrap(true);
 	_txtUpdateInfo->setText(tr("STR_LATEST_VERSION_INFO"));
