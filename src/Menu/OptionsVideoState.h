@@ -40,18 +40,13 @@ class InteractiveSurface;
 class OptionsVideoState : public OptionsBaseState
 {
 private:
-	static const std::string GL_EXT, GL_FOLDER, GL_STRING;
-
 	InteractiveSurface *_displaySurface;
-	Text *_txtDisplayResolution, *_txtDisplayX;
-	TextEdit *_txtDisplayWidth, *_txtDisplayHeight;
-	ArrowButton *_btnDisplayResolutionUp, *_btnDisplayResolutionDown;
+	Text *_txtDisplayResolution, *_txtDisplayX, *_txtDisplayWidth, *_txtDisplayHeight;
 
 	Text *_txtLanguage, *_txtFilter, *_txtGeoScale, *_txtBattleScale;
-	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxDisplayMode, *_cbxGeoScale, *_cbxBattleScale;
-	Text *_txtMode;
+	ComboBox *_cbxLanguage, *_cbxFilter, *_cbxGeoScale, *_cbxBattleScale;
 	Text *_txtOptions;
-	ToggleTextButton *_btnLetterbox, *_btnLockMouse, *_btnRootWindowedMode;
+	ToggleTextButton *_btnLetterbox, *_btnLockMouse;
 
 	std::vector<SDL_DisplayMode> _res;
 	int _resCurrent;
@@ -64,26 +59,12 @@ public:
 	OptionsVideoState(OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsVideoState();
-	/// Handler for clicking the Next Resolution button.
-	void btnDisplayResolutionUpClick(Action *action);
-	/// Handler for clicking the Previous Resolution button.
-	void btnDisplayResolutionDownClick(Action *action);
-	/// Handler for changing the Display Width text.
-	void txtDisplayWidthChange(Action *action);
-	/// Handler for changing the Display Height text.
-	void txtDisplayHeightChange(Action *action);
 	/// Handler for changing the Language combobox.
 	void cbxLanguageChange(Action *action);
 	/// Handler for changing the Filter combobox.
 	void cbxFilterChange(Action *action);
-	/// Handler for clicking the Display Mode combobox.
-	void updateDisplayMode(Action *action);
 	/// Handler for clicking the Letterboxed button.
 	void btnLetterboxClick(Action *action);
-	/// Handler for clicking the Lock Mouse button.
-	void btnLockMouseClick(Action *action);
-	/// Handler for clicking the Root Window Pos button.
-	void btnRootWindowedModeClick(Action *action);
 	/// Handler for updating the selected battlescape scale.
 	void updateBattlescapeScale(Action *action);
 	/// Handler for updating the selected geoscape scale.
