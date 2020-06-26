@@ -117,7 +117,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin) : OptionsBaseState(or
 	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
 	_btnLetterbox->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-    
+
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
 
 	std::vector<std::string> names;
