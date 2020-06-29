@@ -39,14 +39,11 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin) : OptionsBaseSt
 	setCategory(_btnGeoscape);
 
 	// Create objects
-	_txtDragScroll = new Text(114, 9, 206, 8);
-	_cbxDragScroll = new ComboBox(this, 104, 16, 206, 18);
-
 	_txtScrollSpeed = new Text(114, 9, 94, 8);
 	_slrScrollSpeed = new Slider(104, 16, 94, 18);
 
-	_txtDogfightSpeed = new Text(114, 9, 206, 40);
-	_slrDogfightSpeed = new Slider(104, 16, 206, 50);
+	_txtDogfightSpeed = new Text(114, 9, 206, 8);
+	_slrDogfightSpeed = new Slider(104, 16, 206, 18);
 
 	_txtClockSpeed = new Text(114, 9, 94, 40);
 	_slrClockSpeed = new Slider(104, 16, 94, 50);
@@ -76,27 +73,9 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin) : OptionsBaseSt
 	add(_txtOptions, "text", "geoscapeMenu");
 	add(_btnShowFunds, "button", "geoscapeMenu");
 
-	add(_txtDragScroll, "text", "geoscapeMenu");
-	add(_cbxDragScroll, "button", "geoscapeMenu");
-
 	centerAllSurfaces();
 
 	// Set up objects
-	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
-
-	std::vector<std::string> dragScrolls;
-	dragScrolls.push_back(tr("STR_DISABLED"));
-	dragScrolls.push_back(tr("STR_LEFT_MOUSE_BUTTON"));
-	dragScrolls.push_back(tr("STR_MIDDLE_MOUSE_BUTTON"));
-	dragScrolls.push_back(tr("STR_RIGHT_MOUSE_BUTTON"));
-
-	_cbxDragScroll->setOptions(dragScrolls);
-	_cbxDragScroll->setSelected(Options::geoDragScrollButton);
-	_cbxDragScroll->onChange((ActionHandler)&OptionsGeoscapeState::cbxDragScrollChange);
-	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
-	_cbxDragScroll->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_cbxDragScroll->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
-
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
 	_slrScrollSpeed->setRange(100, 10);
@@ -163,15 +142,6 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin) : OptionsBaseSt
 OptionsGeoscapeState::~OptionsGeoscapeState()
 {
 
-}
-
-/**
- * Changes the Drag Scroll option.
- * @param action Pointer to an action.
- */
-void OptionsGeoscapeState::cbxDragScrollChange(Action *)
-{
-	Options::geoDragScrollButton = _cbxDragScroll->getSelected();
 }
 
 /**

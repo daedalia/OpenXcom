@@ -25,8 +25,7 @@ OptionsSystemState::OptionsSystemState(OptionsOrigin origin) : OptionsBaseState(
 	_btnControls = new TextButton(104, 16, 206, 18);
 
 	_txtLogDestination = new Text(104, 9, 94, 8);
-	_btnLogFile = new ToggleTextButton(50, 16, 94, 18);
-	_btnLogSystem = new ToggleTextButton(50, 16, 94 + 50 + 4, 18);
+	_btnLogFile = new ToggleTextButton(104, 16, 94, 18);
 
 	_txtDebugOptions = new Text(104, 9, 94, 36);
 	_btnLogTouchEvents = new ToggleTextButton(104, 16, 94, 46);
@@ -37,7 +36,6 @@ OptionsSystemState::OptionsSystemState(OptionsOrigin origin) : OptionsBaseState(
 
 	add(_txtLogDestination, "text", "systemMenu");
 	add(_btnLogFile, "button", "systemMenu");
-	add(_btnLogSystem, "button", "systemMenu");
 
 	add(_txtDebugOptions, "text", "systemMenu");
 	add(_btnLogTouchEvents, "button", "systemMenu");
@@ -53,13 +51,6 @@ OptionsSystemState::OptionsSystemState(OptionsOrigin origin) : OptionsBaseState(
 	_btnLogFile->setTooltip("STR_LOG_FILE_DESC");
 	_btnLogFile->onMouseIn((ActionHandler)&OptionsSystemState::txtTooltipIn);
 	_btnLogFile->onMouseOut((ActionHandler)&OptionsSystemState::txtTooltipOut);
-
-	_btnLogSystem->setText(tr("STR_LOG_SYSTEM"));
-	_btnLogSystem->setPressed(Options::logToSystem);
-	_btnLogSystem->onMouseClick((ActionHandler)&OptionsSystemState::btnLogClick);
-	_btnLogSystem->setTooltip("STR_LOG_SYSTEM_DESC");
-	_btnLogSystem->onMouseIn((ActionHandler)&OptionsSystemState::txtTooltipIn);
-	_btnLogSystem->onMouseOut((ActionHandler)&OptionsSystemState::txtTooltipOut);
 
 	_txtDebugOptions->setText(tr("STR_DEBUG_OPTIONS"));
 
@@ -103,10 +94,6 @@ void OptionsSystemState::btnLogClick(Action *action)
 	if (sender == _btnLogFile)
 	{
 		Options::logToFile = _btnLogFile->getPressed();
-	}
-	if (sender == _btnLogSystem)
-	{
-		Options::logToSystem = _btnLogSystem->getPressed();
 	}
 }
 

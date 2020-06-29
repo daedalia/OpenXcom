@@ -35,8 +35,6 @@ class ComboBox;
 class OptionsGeoscapeState : public OptionsBaseState
 {
 private:
-	Text *_txtDragScroll;
-	ComboBox *_cbxDragScroll;
 	Text *_txtScrollSpeed, *_txtDogfightSpeed, *_txtClockSpeed;
 	Slider *_slrScrollSpeed, *_slrDogfightSpeed, *_slrClockSpeed;
 	Text *_txtGlobeDetails;
@@ -48,8 +46,6 @@ public:
 	OptionsGeoscapeState(OptionsOrigin origin);
 	/// Cleans up the Geoscape Options state.
 	~OptionsGeoscapeState();
-	/// Handler for changing the Drag Scroll combobox.
-	void cbxDragScrollChange(Action *action);
 	/// Handler for changing the scroll speed slider.
 	void slrScrollSpeedChange(Action *action);
 	/// Handler for changing the dogfight speed slider.

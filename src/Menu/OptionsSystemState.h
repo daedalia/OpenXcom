@@ -25,7 +25,6 @@ private:
 	Text *_txtLogDestination;
 	Text *_txtDebugOptions;
 	ToggleTextButton *_btnLogFile;
-	ToggleTextButton *_btnLogSystem;
 	ToggleTextButton *_btnLogTouchEvents;
 	ToggleTextButton *_btnFakeEvents;
 public:
